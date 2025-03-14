@@ -3,7 +3,7 @@
  * Plugin Name: WP Request
  * Plugin URI: 
  * Description: A plugin to handle user requests through a form and display them in the admin panel.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: 
  * Author URI: 
  * Text Domain: wp-request
@@ -16,7 +16,7 @@ if (!defined('WPINC')) {
 }
 
 // Define plugin constants
-define('WP_REQUEST_VERSION', '1.0.0');
+define('WP_REQUEST_VERSION', '1.0.1');
 define('WP_REQUEST_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WP_REQUEST_PLUGIN_URL', plugin_dir_url(__FILE__));
 

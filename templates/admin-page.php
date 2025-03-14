@@ -22,7 +22,6 @@ if (!current_user_can('manage_options')) {
         echo '<div class="updated"><p>' . __('Request deleted successfully.', 'wp-request') . '</p></div>';
     }
     
-    <?php
     // Get the requests from the database
     global $wpdb;
     $table_name = $wpdb->prefix . 'wp_requests';
@@ -67,6 +66,7 @@ if (!current_user_can('manage_options')) {
                         <td><?php echo esc_html($request['name']); ?></td>
                         <td><?php echo esc_html($request['email']); ?></td>
                         <td><?php echo esc_html($request['description']); ?></td>
+                        <td><?php echo esc_html(date_i18n(get_option('date_format') . ' ' . get_option('time_format'), strtotime($request['created_at']))); ?></td>
                         <td>
                             <form method="post" action="">
                                 <input type="hidden" name="request_id" value="<?php echo esc_attr($request['id']); ?>">
@@ -74,3 +74,35 @@ if (!current_user_can('manage_options')) {
                                 <button type="submit" name="update_note" class="button"><?php _e('Update', 'wp-request'); ?></button>
                             </form>
                         </td>
+                        <td>
+                            <form method="post" action="">
+                                <input type="hidden" name="request_id" value="<?php echo esc_attr($request['id']); ?>">
+                                <button type="submit" name="delete_request" class="button"><?php _e('Delete', 'wp-request'); ?></button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        
+        <?php
+        // Pagination
+        if ($total_pages > 1) {
+            echo '<div class="tablenav"><div class="tablenav-pages">';
+            echo paginate_links(array(
+                'base' => add_query_arg('paged', '%#%'),
+                'format' => '',
+                'prev_text' => '&laquo;',
+                'next_text' => '&raquo;',
+                'total' => $total_pages,
+                'current' => $current_page,
+            ));
+            echo '</div></div>';
+        }
+    } else {
+        ?>
+        <p><?php _e('No requests found.', 'wp-request'); ?></p>
+    <?php
+    }
+    ?>
+</div>
