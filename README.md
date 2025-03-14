@@ -20,4 +20,4 @@ Requests can be viewed and managed in the WordPress admin panel under the "WP Re
 Contributions are welcome! Please submit a pull request or open an issue for any enhancements or bug fixes.
 
 ## License
-This plugin is licensed under the MIT License.
+This plugin is licensed under the GPL-3.0 License.
