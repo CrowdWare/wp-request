@@ -3,7 +3,7 @@
  * Plugin Name: WP Request
  * Plugin URI: 
  * Description: A plugin to handle user requests through a form and display them in the admin panel.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: 
  * Author URI: 
  * Text Domain: wp-request
@@ -16,7 +16,7 @@ if (!defined('WPINC')) {
 }
 
 // Define plugin constants
-define('WP_REQUEST_VERSION', '1.0.1');
+define('WP_REQUEST_VERSION', '1.0.2');
 define('WP_REQUEST_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WP_REQUEST_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -147,16 +147,23 @@ add_action('admin_menu', 'wp_request_add_admin_menu');
  * Display admin page
  */
 function wp_request_admin_page() {
-    // Handle update and delete requests
+    global $wpdb; // Ensure $wpdb is accessible
+    $table_name = $wpdb->prefix . 'wp_requests'; // Define $table_name here
     if (isset($_POST['update_note'])) {
         $request_id = intval($_POST['request_id']);
         $request_note = sanitize_text_field($_POST['request_note']);
         
-        $wpdb->update(
+        // Debugging output for the request ID and note
+        echo "Updating request ID: $request_id with note: $request_note<br>";
+        
+        $result = $wpdb->update(
             $table_name,
             array('note' => $request_note),
             array('id' => $request_id)
         );
+        
+        // Debugging output
+        echo "Update result: " . ($result ? "Success" : "Failed") . "<br>";
         
         // Redirect to the same page to prevent form resubmission
         wp_redirect(add_query_arg('updated', '1'));
@@ -166,10 +173,13 @@ function wp_request_admin_page() {
     if (isset($_POST['delete_request'])) {
         $request_id = intval($_POST['request_id']);
         
-        $wpdb->delete(
+        $result = $wpdb->delete(
             $table_name,
             array('id' => $request_id)
         );
+        
+        // Debugging output
+        echo "Delete result: " . ($result ? "Success" : "Failed") . "<br>";
         
         // Redirect to the same page to prevent form resubmission
         wp_redirect(add_query_arg('deleted', '1'));
@@ -178,11 +188,3 @@ function wp_request_admin_page() {
 
     include(WP_REQUEST_PLUGIN_DIR . 'templates/admin-page.php');
 }
-
-/**
- * Load plugin textdomain
- */
-function wp_request_load_textdomain() {
-    load_plugin_textdomain('wp-request', false, dirname(plugin_basename(__FILE__)) . '/languages/');
-}
-add_action('plugins_loaded', 'wp_request_load_textdomain');
